@@ -22,6 +22,7 @@ public class QuickSort2 {
         quickSort(arr, index + 1, end);
     }
 
+    @SuppressWarnings("all")
     private static int partition(int[] arr, int start, int end) {
         //基准元素
         int pivot = arr[start];

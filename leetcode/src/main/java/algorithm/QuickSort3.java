@@ -42,6 +42,7 @@ public class QuickSort3 {
         }
     }
 
+    @SuppressWarnings("all")
     private static int partition(int[] arr, int start, int end) {
         //基准元素
         int pivot = arr[start];
