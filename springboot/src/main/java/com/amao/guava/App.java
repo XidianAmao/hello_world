@@ -1,4 +1,4 @@
-package com.guazi.amao;
+package com.amao.guava;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

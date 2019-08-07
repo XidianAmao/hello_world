@@ -1,4 +1,4 @@
-package com.guazi.amao.webflux;
+package com.amao.guava.webflux;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
