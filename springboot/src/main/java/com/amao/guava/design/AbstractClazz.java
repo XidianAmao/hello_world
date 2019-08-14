@@ -17,5 +17,7 @@ public abstract class AbstractClazz {
 
     public void execute(){
         appService.say();
+        System.out.println("我是抽象类");
+        System.out.println(appService.say());
     }
 }
