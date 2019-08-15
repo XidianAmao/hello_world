@@ -53,25 +53,25 @@ public class ArgumentTest {
      * 匹配任意参数
      * argThat通过下面下面 extends 继承来实现对比
      */
-    @Test
-    public void with_unspecified_arguments(){
-        List list = mock(List.class);
-        //匹配任意参数
-        when(list.get(anyInt())).thenReturn(1);
-        when(list.contains(argThat(new IsValid()))).thenReturn(true);
-        System.out.println(list.get(2));
-        assertEquals(1, list.get(1));
-        assertEquals(1, list.get(999));
-        assertTrue(list.contains(1));
-        assertTrue(!list.contains(3));
-    }
-
-    private class IsValid extends ArgumentMatcher<List> {
-        @Override
-        public boolean matches(Object o) {
-            return o.equals(1) || o.equals(2);
-        }
-    }
+//    @Test
+//    public void with_unspecified_arguments(){
+//        List list = mock(List.class);
+//        //匹配任意参数
+//        when(list.get(anyInt())).thenReturn(1);
+//        when(list.contains(argThat(new IsValid()))).thenReturn(true);
+//        System.out.println(list.get(2));
+//        assertEquals(1, list.get(1));
+//        assertEquals(1, list.get(999));
+//        assertTrue(list.contains(1));
+//        assertTrue(!list.contains(3));
+//    }
+//
+//    private class IsValid implements ArgumentMatcher<List> {
+//        @Override
+//        public boolean matches(Object o) {
+//            return o.equals(1) || o.equals(2);
+//        }
+//    }
 
     @Test
     public void all_arguments_provided_by_matchers(){

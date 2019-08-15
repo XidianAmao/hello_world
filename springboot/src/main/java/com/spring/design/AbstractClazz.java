@@ -1,4 +1,4 @@
-package com.amao.guava.design;
+package com.spring.design;
 
 import com.amao.guava.AppService;
 

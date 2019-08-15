@@ -1,7 +1,9 @@
 package com.amao.guava;
 
-import com.amao.guava.design.ConcreteClazz1;
-import com.amao.guava.design.ConcreteClazz2;
+import com.spring.design.ConcreteClazz1;
+import com.spring.design.ConcreteClazz2;
+import com.spring.mutlithread.MultiThreadMain;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,10 +18,12 @@ import javax.annotation.Resource;
 public class AppController {
     @Resource
     private AppService appService;
-    @Resource
+    @Autowired
     private ConcreteClazz1 concreteClazz1;
-    @Resource
+    @Autowired
     private ConcreteClazz2 concreteClazz2;
+    @Resource
+    private MultiThreadMain multiThreadMain;
 
     @RequestMapping("/ask")
     public String getResult(String say){
@@ -35,5 +39,10 @@ public class AppController {
     public void getC2Result(){
         concreteClazz2.sayByChildren();
         concreteClazz2.execute();
+    }
+
+    @RequestMapping("/startThread")
+    public void startThread(){
+        multiThreadMain.main();
     }
 }

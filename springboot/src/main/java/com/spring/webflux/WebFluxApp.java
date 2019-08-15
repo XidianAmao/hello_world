@@ -1,4 +1,4 @@
-package com.amao.guava.webflux;
+package com.spring.webflux;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
