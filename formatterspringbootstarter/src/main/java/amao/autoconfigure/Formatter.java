@@ -1,4 +1,4 @@
-package com.guazi.amao.autoconfigure;
+package amao.autoconfigure;
 
 /**
  * @author fengguangtong@guazi.com

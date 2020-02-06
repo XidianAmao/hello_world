@@ -1,4 +1,4 @@
-package com.guazi.amao.autoconfigure;
+package amao.autoconfigure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

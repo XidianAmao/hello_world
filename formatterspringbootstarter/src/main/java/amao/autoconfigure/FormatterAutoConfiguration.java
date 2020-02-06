@@ -1,4 +1,4 @@
-package com.guazi.amao.autoconfigure;
+package amao.autoconfigure;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;

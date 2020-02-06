@@ -1,4 +1,4 @@
-package com.guazi.amao.autoconfigure;
+package amao.autoconfigure;
 
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

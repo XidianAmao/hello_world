@@ -1,4 +1,4 @@
-package com.guazi.amao.autoconfigure;
+package amao.autoconfigure;
 
 /**
  * null安全实现

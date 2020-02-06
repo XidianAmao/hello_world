@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.guazi.amao.autoconfigure.FormatterAutoConfiguration
+  amao.autoconfigure.FormatterAutoConfiguration
