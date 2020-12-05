@@ -1,11 +1,9 @@
-package stu.yang;
+package stu.yang.domain;
 
 import java.util.StringJoiner;
 
 /**
- * @author fengguangtong@guazi.com
- * @version 1.0
- * @date 2020/9/20 9:53 下午
+ * 主表信息
  */
 public class Land {
     private String landNo;

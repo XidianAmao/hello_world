@@ -1,16 +1,15 @@
-package stu.yang;
+package stu.yang.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import stu.yang.domain.Land;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author fengguangtong@guazi.com
- * @version 1.0
- * @date 2020/9/20 4:56 下午
+ * 数据库查询类
  */
 @Component
 public class Dao {
@@ -22,9 +21,9 @@ public class Dao {
      *
      * @return 地块主表列表信息
      */
-    public Map<String, Object> queryLandList() {
+    public List<Map<String, Object>> queryLandList() {
         List<Map<String, Object>> list = jdbcTemplate.queryForList("select * FROM tb_land");
-        return list.get(0);
+        return list;
     }
 
     /**
