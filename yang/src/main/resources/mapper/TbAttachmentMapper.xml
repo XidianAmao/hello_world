@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="stu.yang.dao.TbAttachmentMapper">
+    <resultMap id="TbAttachmentMap" type="TbAttachment">
+		<result column="id" property="id" jdbcType="DECIMAL" />
+		<result column="land_no" property="landNo" jdbcType="VARCHAR" />
+		<result column="biz_type" property="bizType" jdbcType="DECIMAL" />
+		<result column="attachment_type" property="attachmentType" jdbcType="DECIMAL" />
+		<result column="attachment_url" property="attachmentUrl" jdbcType="VARCHAR" />
+		<result column="attachment_size" property="attachmentSize" jdbcType="DECIMAL" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="created_user" property="createdUser" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <sql id="tbAttachmentColumns">
+            id,
+            land_no,
+            biz_type,
+            attachment_type,
+            attachment_url,
+            attachment_size,
+            created_at,
+            created_user
+    </sql>
+    
+
+
+<!-- 插入 -->
+    <insert id="insert" parameterType="TbAttachment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_attachment
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="landNo != null and landNo != ''">
+                            land_no,
+                        </if>
+                        <if test="bizType != null and bizType != ''">
+                            biz_type,
+                        </if>
+                        <if test="attachmentType != null and attachmentType != ''">
+                            attachment_type,
+                        </if>
+                        <if test="attachmentUrl != null and attachmentUrl != ''">
+                            attachment_url,
+                        </if>
+                        <if test="attachmentSize != null and attachmentSize != ''">
+                            attachment_size,
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            created_at,
+                        </if>
+                        <if test="createdUser != null and createdUser != ''">
+                            created_user,
+                        </if>
+            </trim>
+        VALUES
+             <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="landNo != null and landNo != ''">
+                            #{landNo,jdbcType=VARCHAR},
+                        </if>
+                        <if test="bizType != null and bizType != ''">
+                            #{bizType,jdbcType=DECIMAL},
+                        </if>
+                        <if test="attachmentType != null and attachmentType != ''">
+                            #{attachmentType,jdbcType=DECIMAL},
+                        </if>
+                        <if test="attachmentUrl != null and attachmentUrl != ''">
+                            #{attachmentUrl,jdbcType=VARCHAR},
+                        </if>
+                        <if test="attachmentSize != null and attachmentSize != ''">
+                            #{attachmentSize,jdbcType=DECIMAL},
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            #{createdAt,jdbcType=TIMESTAMP},
+                        </if>
+                        <if test="createdUser != null and createdUser != ''">
+                            #{createdUser,jdbcType=VARCHAR},
+                        </if>
+             </trim>
+    </insert>
+
+
+	
+    <!-- 修改 -->
+    <update id="update" parameterType="TbAttachment">
+        <if test="_parameter != null">
+            <if test="id != null and id > 0">
+                update tb_attachment set
+        		        <if test="landNo != null and landNo != ''">
+                        	land_no = #{landNo,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="bizType != null and bizType != ''">
+                        	biz_type = #{bizType,jdbcType=DECIMAL},
+        		        </if>
+        		        <if test="attachmentType != null and attachmentType != ''">
+                        	attachment_type = #{attachmentType,jdbcType=DECIMAL},
+        		        </if>
+        		        <if test="attachmentUrl != null and attachmentUrl != ''">
+                        	attachment_url = #{attachmentUrl,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="attachmentSize != null and attachmentSize != ''">
+                        	attachment_size = #{attachmentSize,jdbcType=DECIMAL},
+        		        </if>
+        		        <if test="createdAt != null and createdAt != ''">
+                        	created_at = #{createdAt,jdbcType=TIMESTAMP},
+        		        </if>
+        		        <if test="createdUser != null and createdUser != ''">
+                        	created_user = #{createdUser,jdbcType=VARCHAR},
+        		        </if>
+                	id = #{id}
+                where id = #{id}
+            </if>
+        </if>
+    </update>
+
+    <!-- 根据主键获取对象信息 -->
+    <select id="getTbAttachmentById" resultMap="TbAttachmentMap" parameterType="java.lang.Integer">
+        <if test="_parameter != null">
+            select <include refid="tbAttachmentColumns"/> from tb_attachment
+            where id = #{_parameter} and yn = 1
+        </if>
+    </select>
+
+
+    <!-- 根据查询Bean获取数据集合，不带翻页 -->
+    <select id="queryTbAttachmentList" resultMap="TbAttachmentMap"
+            parameterType="stu.yang.domain.TbAttachmentQuery">
+        select <include refid="tbAttachmentColumns"/> from tb_attachment where <include refid="queryTbAttachmentListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取数据集合，翻页 -->
+    <select id="queryTbAttachmentListWithPage" resultMap="TbAttachmentMap"
+            parameterType="stu.yang.domain.TbAttachmentQuery">
+        select <include refid="tbAttachmentColumns"/> from tb_attachment where <include refid="queryTbAttachmentListWhere"/>
+        order by 
+        <if test="sidx != null and sidx != ''">
+              #{sidxColumn},jdbcType=VARCHAR}  
+              <if test="sord != null and sord != ''">
+                #{sord},jdbcType=VARCHAR}   
+              </if>
+        </if>
+        <if test="sidx == null or sidx == ''">
+              id desc 
+        </if> 
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <!-- 根据查询Bean查询-判断是否存在 -->
+    <select id="exist" resultType="java.lang.Integer" parameterType="stu.yang.domain.TbAttachmentQuery">
+        select count(1) from tb_attachment where <include refid="queryTbAttachmentListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取集合总数 -->
+    <select id="queryTbAttachmentCount" resultType="java.lang.Integer"
+            parameterType="stu.yang.domain.TbAttachmentQuery">
+        select count(1) from tb_attachment where <include refid="queryTbAttachmentListWhere"/>
+    </select>
+
+    <!-- 删除信息-逻辑删除 -->
+    <update id="delete" parameterType="TbAttachment">
+        update tb_attachment
+        set yn = 0, update_user = #{updateUser,jdbcType=VARCHAR}
+        where id = #{id}
+    </update>
+    
+
+    <!-- 常用的查询Where条件 -->
+    <sql id="queryTbAttachmentListWhere">
+    	yn = 1
+        <if test="id != null and id != ''">
+        	and id = #{id,jdbcType=DECIMAL}
+        </if>
+        <if test="landNo != null and landNo != ''">
+        	and land_no = #{landNo,jdbcType=VARCHAR}
+        </if>
+        <if test="bizType != null and bizType != ''">
+        	and biz_type = #{bizType,jdbcType=DECIMAL}
+        </if>
+        <if test="attachmentType != null and attachmentType != ''">
+        	and attachment_type = #{attachmentType,jdbcType=DECIMAL}
+        </if>
+        <if test="attachmentUrl != null and attachmentUrl != ''">
+        	and attachment_url = #{attachmentUrl,jdbcType=VARCHAR}
+        </if>
+        <if test="attachmentSize != null and attachmentSize != ''">
+        	and attachment_size = #{attachmentSize,jdbcType=DECIMAL}
+        </if>
+        <if test="createdAt != null and createdAt != ''">
+        	and created_at = #{createdAt,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createdUser != null and createdUser != ''">
+        	and created_user = #{createdUser,jdbcType=VARCHAR}
+        </if>
+    </sql>
+</mapper>

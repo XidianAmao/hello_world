@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="stu.yang.dao.TbStratumMapper">
+    <resultMap id="TbStratumMap" type="TbStratum">
+		<result column="id" property="id" jdbcType="DECIMAL" />
+		<result column="land_no" property="landNo" jdbcType="VARCHAR" />
+		<result column="stratum_desc" property="stratumDesc" jdbcType="VARCHAR" />
+		<result column="stratum_type" property="stratumType" jdbcType="DECIMAL" />
+		<result column="data_desc" property="dataDesc" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="created_user" property="createdUser" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <sql id="tbStratumColumns">
+            id,
+            land_no,
+            stratum_desc,
+            stratum_type,
+            data_desc,
+            created_at,
+            created_user
+    </sql>
+    
+
+
+<!-- 插入 -->
+    <insert id="insert" parameterType="TbStratum" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_stratum
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="landNo != null and landNo != ''">
+                            land_no,
+                        </if>
+                        <if test="stratumDesc != null and stratumDesc != ''">
+                            stratum_desc,
+                        </if>
+                        <if test="stratumType != null and stratumType != ''">
+                            stratum_type,
+                        </if>
+                        <if test="dataDesc != null and dataDesc != ''">
+                            data_desc,
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            created_at,
+                        </if>
+                        <if test="createdUser != null and createdUser != ''">
+                            created_user,
+                        </if>
+            </trim>
+        VALUES
+             <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="landNo != null and landNo != ''">
+                            #{landNo,jdbcType=VARCHAR},
+                        </if>
+                        <if test="stratumDesc != null and stratumDesc != ''">
+                            #{stratumDesc,jdbcType=VARCHAR},
+                        </if>
+                        <if test="stratumType != null and stratumType != ''">
+                            #{stratumType,jdbcType=DECIMAL},
+                        </if>
+                        <if test="dataDesc != null and dataDesc != ''">
+                            #{dataDesc,jdbcType=VARCHAR},
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            #{createdAt,jdbcType=TIMESTAMP},
+                        </if>
+                        <if test="createdUser != null and createdUser != ''">
+                            #{createdUser,jdbcType=VARCHAR},
+                        </if>
+             </trim>
+    </insert>
+
+
+	
+    <!-- 修改 -->
+    <update id="update" parameterType="TbStratum">
+        <if test="_parameter != null">
+            <if test="id != null and id > 0">
+                update tb_stratum set
+        		        <if test="landNo != null and landNo != ''">
+                        	land_no = #{landNo,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="stratumDesc != null and stratumDesc != ''">
+                        	stratum_desc = #{stratumDesc,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="stratumType != null and stratumType != ''">
+                        	stratum_type = #{stratumType,jdbcType=DECIMAL},
+        		        </if>
+        		        <if test="dataDesc != null and dataDesc != ''">
+                        	data_desc = #{dataDesc,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="createdAt != null and createdAt != ''">
+                        	created_at = #{createdAt,jdbcType=TIMESTAMP},
+        		        </if>
+        		        <if test="createdUser != null and createdUser != ''">
+                        	created_user = #{createdUser,jdbcType=VARCHAR},
+        		        </if>
+                	id = #{id}
+                where id = #{id}
+            </if>
+        </if>
+    </update>
+
+    <!-- 根据主键获取对象信息 -->
+    <select id="getTbStratumById" resultMap="TbStratumMap" parameterType="java.lang.Integer">
+        <if test="_parameter != null">
+            select <include refid="tbStratumColumns"/> from tb_stratum
+            where id = #{_parameter} and yn = 1
+        </if>
+    </select>
+
+
+    <!-- 根据查询Bean获取数据集合，不带翻页 -->
+    <select id="queryTbStratumList" resultMap="TbStratumMap"
+            parameterType="stu.yang.domain.TbStratumQuery">
+        select <include refid="tbStratumColumns"/> from tb_stratum where <include refid="queryTbStratumListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取数据集合，翻页 -->
+    <select id="queryTbStratumListWithPage" resultMap="TbStratumMap"
+            parameterType="stu.yang.domain.TbStratumQuery">
+        select <include refid="tbStratumColumns"/> from tb_stratum where <include refid="queryTbStratumListWhere"/>
+        order by 
+        <if test="sidx != null and sidx != ''">
+              #{sidxColumn},jdbcType=VARCHAR}  
+              <if test="sord != null and sord != ''">
+                #{sord},jdbcType=VARCHAR}   
+              </if>
+        </if>
+        <if test="sidx == null or sidx == ''">
+              id desc 
+        </if> 
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <!-- 根据查询Bean查询-判断是否存在 -->
+    <select id="exist" resultType="java.lang.Integer" parameterType="stu.yang.domain.TbStratumQuery">
+        select count(1) from tb_stratum where <include refid="queryTbStratumListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取集合总数 -->
+    <select id="queryTbStratumCount" resultType="java.lang.Integer"
+            parameterType="stu.yang.domain.TbStratumQuery">
+        select count(1) from tb_stratum where <include refid="queryTbStratumListWhere"/>
+    </select>
+
+    <!-- 删除信息-逻辑删除 -->
+    <update id="delete" parameterType="TbStratum">
+        update tb_stratum
+        set yn = 0, update_user = #{updateUser,jdbcType=VARCHAR}
+        where id = #{id}
+    </update>
+    
+
+    <!-- 常用的查询Where条件 -->
+    <sql id="queryTbStratumListWhere">
+    	yn = 1
+        <if test="id != null and id != ''">
+        	and id = #{id,jdbcType=DECIMAL}
+        </if>
+        <if test="landNo != null and landNo != ''">
+        	and land_no = #{landNo,jdbcType=VARCHAR}
+        </if>
+        <if test="stratumDesc != null and stratumDesc != ''">
+        	and stratum_desc = #{stratumDesc,jdbcType=VARCHAR}
+        </if>
+        <if test="stratumType != null and stratumType != ''">
+        	and stratum_type = #{stratumType,jdbcType=DECIMAL}
+        </if>
+        <if test="dataDesc != null and dataDesc != ''">
+        	and data_desc = #{dataDesc,jdbcType=VARCHAR}
+        </if>
+        <if test="createdAt != null and createdAt != ''">
+        	and created_at = #{createdAt,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createdUser != null and createdUser != ''">
+        	and created_user = #{createdUser,jdbcType=VARCHAR}
+        </if>
+    </sql>
+</mapper>

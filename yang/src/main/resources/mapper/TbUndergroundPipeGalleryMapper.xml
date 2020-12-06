@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="stu.yang.dao.TbUndergroundPipeGalleryMapper">
+    <resultMap id="TbUndergroundPipeGalleryMap" type="TbUndergroundPipeGallery">
+		<result column="id" property="id" jdbcType="DECIMAL" />
+		<result column="land_no" property="landNo" jdbcType="VARCHAR" />
+		<result column="underground_pipe_gallery_desc" property="undergroundPipeGalleryDesc" jdbcType="VARCHAR" />
+		<result column="underground_pipe_gallery_type" property="undergroundPipeGalleryType" jdbcType="DECIMAL" />
+		<result column="data_desc" property="dataDesc" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="created_user" property="createdUser" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <sql id="tbUndergroundPipeGalleryColumns">
+            id,
+            land_no,
+            underground_pipe_gallery_desc,
+            underground_pipe_gallery_type,
+            data_desc,
+            created_at,
+            created_user
+    </sql>
+    
+
+
+<!-- 插入 -->
+    <insert id="insert" parameterType="TbUndergroundPipeGallery" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_underground_pipe_gallery
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="landNo != null and landNo != ''">
+                            land_no,
+                        </if>
+                        <if test="undergroundPipeGalleryDesc != null and undergroundPipeGalleryDesc != ''">
+                            underground_pipe_gallery_desc,
+                        </if>
+                        <if test="undergroundPipeGalleryType != null and undergroundPipeGalleryType != ''">
+                            underground_pipe_gallery_type,
+                        </if>
+                        <if test="dataDesc != null and dataDesc != ''">
+                            data_desc,
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            created_at,
+                        </if>
+                        <if test="createdUser != null and createdUser != ''">
+                            created_user,
+                        </if>
+            </trim>
+        VALUES
+             <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="landNo != null and landNo != ''">
+                            #{landNo,jdbcType=VARCHAR},
+                        </if>
+                        <if test="undergroundPipeGalleryDesc != null and undergroundPipeGalleryDesc != ''">
+                            #{undergroundPipeGalleryDesc,jdbcType=VARCHAR},
+                        </if>
+                        <if test="undergroundPipeGalleryType != null and undergroundPipeGalleryType != ''">
+                            #{undergroundPipeGalleryType,jdbcType=DECIMAL},
+                        </if>
+                        <if test="dataDesc != null and dataDesc != ''">
+                            #{dataDesc,jdbcType=VARCHAR},
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            #{createdAt,jdbcType=TIMESTAMP},
+                        </if>
+                        <if test="createdUser != null and createdUser != ''">
+                            #{createdUser,jdbcType=VARCHAR},
+                        </if>
+             </trim>
+    </insert>
+
+
+	
+    <!-- 修改 -->
+    <update id="update" parameterType="TbUndergroundPipeGallery">
+        <if test="_parameter != null">
+            <if test="id != null and id > 0">
+                update tb_underground_pipe_gallery set
+        		        <if test="landNo != null and landNo != ''">
+                        	land_no = #{landNo,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="undergroundPipeGalleryDesc != null and undergroundPipeGalleryDesc != ''">
+                        	underground_pipe_gallery_desc = #{undergroundPipeGalleryDesc,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="undergroundPipeGalleryType != null and undergroundPipeGalleryType != ''">
+                        	underground_pipe_gallery_type = #{undergroundPipeGalleryType,jdbcType=DECIMAL},
+        		        </if>
+        		        <if test="dataDesc != null and dataDesc != ''">
+                        	data_desc = #{dataDesc,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="createdAt != null and createdAt != ''">
+                        	created_at = #{createdAt,jdbcType=TIMESTAMP},
+        		        </if>
+        		        <if test="createdUser != null and createdUser != ''">
+                        	created_user = #{createdUser,jdbcType=VARCHAR},
+        		        </if>
+                	id = #{id}
+                where id = #{id}
+            </if>
+        </if>
+    </update>
+
+    <!-- 根据主键获取对象信息 -->
+    <select id="getTbUndergroundPipeGalleryById" resultMap="TbUndergroundPipeGalleryMap" parameterType="java.lang.Integer">
+        <if test="_parameter != null">
+            select <include refid="tbUndergroundPipeGalleryColumns"/> from tb_underground_pipe_gallery
+            where id = #{_parameter} and yn = 1
+        </if>
+    </select>
+
+
+    <!-- 根据查询Bean获取数据集合，不带翻页 -->
+    <select id="queryTbUndergroundPipeGalleryList" resultMap="TbUndergroundPipeGalleryMap"
+            parameterType="stu.yang.domain.TbUndergroundPipeGalleryQuery">
+        select <include refid="tbUndergroundPipeGalleryColumns"/> from tb_underground_pipe_gallery where <include refid="queryTbUndergroundPipeGalleryListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取数据集合，翻页 -->
+    <select id="queryTbUndergroundPipeGalleryListWithPage" resultMap="TbUndergroundPipeGalleryMap"
+            parameterType="stu.yang.domain.TbUndergroundPipeGalleryQuery">
+        select <include refid="tbUndergroundPipeGalleryColumns"/> from tb_underground_pipe_gallery where <include refid="queryTbUndergroundPipeGalleryListWhere"/>
+        order by 
+        <if test="sidx != null and sidx != ''">
+              #{sidxColumn},jdbcType=VARCHAR}  
+              <if test="sord != null and sord != ''">
+                #{sord},jdbcType=VARCHAR}   
+              </if>
+        </if>
+        <if test="sidx == null or sidx == ''">
+              id desc 
+        </if> 
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <!-- 根据查询Bean查询-判断是否存在 -->
+    <select id="exist" resultType="java.lang.Integer" parameterType="stu.yang.domain.TbUndergroundPipeGalleryQuery">
+        select count(1) from tb_underground_pipe_gallery where <include refid="queryTbUndergroundPipeGalleryListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取集合总数 -->
+    <select id="queryTbUndergroundPipeGalleryCount" resultType="java.lang.Integer"
+            parameterType="stu.yang.domain.TbUndergroundPipeGalleryQuery">
+        select count(1) from tb_underground_pipe_gallery where <include refid="queryTbUndergroundPipeGalleryListWhere"/>
+    </select>
+
+    <!-- 删除信息-逻辑删除 -->
+    <update id="delete" parameterType="TbUndergroundPipeGallery">
+        update tb_underground_pipe_gallery
+        set yn = 0, update_user = #{updateUser,jdbcType=VARCHAR}
+        where id = #{id}
+    </update>
+    
+
+    <!-- 常用的查询Where条件 -->
+    <sql id="queryTbUndergroundPipeGalleryListWhere">
+    	yn = 1
+        <if test="id != null and id != ''">
+        	and id = #{id,jdbcType=DECIMAL}
+        </if>
+        <if test="landNo != null and landNo != ''">
+        	and land_no = #{landNo,jdbcType=VARCHAR}
+        </if>
+        <if test="undergroundPipeGalleryDesc != null and undergroundPipeGalleryDesc != ''">
+        	and underground_pipe_gallery_desc = #{undergroundPipeGalleryDesc,jdbcType=VARCHAR}
+        </if>
+        <if test="undergroundPipeGalleryType != null and undergroundPipeGalleryType != ''">
+        	and underground_pipe_gallery_type = #{undergroundPipeGalleryType,jdbcType=DECIMAL}
+        </if>
+        <if test="dataDesc != null and dataDesc != ''">
+        	and data_desc = #{dataDesc,jdbcType=VARCHAR}
+        </if>
+        <if test="createdAt != null and createdAt != ''">
+        	and created_at = #{createdAt,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createdUser != null and createdUser != ''">
+        	and created_user = #{createdUser,jdbcType=VARCHAR}
+        </if>
+    </sql>
+</mapper>

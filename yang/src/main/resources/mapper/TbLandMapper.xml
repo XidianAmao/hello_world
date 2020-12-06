@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="stu.yang.dao.TbLandMapper">
+    <resultMap id="TbLandMap" type="TbLand">
+		<result column="id" property="id" jdbcType="DECIMAL" />
+		<result column="land_no" property="landNo" jdbcType="VARCHAR" />
+		<result column="city_no" property="cityNo" jdbcType="DECIMAL" />
+		<result column="land_property_no" property="landPropertyNo" jdbcType="VARCHAR" />
+		<result column="land_property" property="landProperty" jdbcType="VARCHAR" />
+		<result column="land_area" property="landArea" jdbcType="DECIMAL" />
+		<result column="land_address" property="landAddress" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="created_user" property="createdUser" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <sql id="tbLandColumns">
+            id,
+            land_no,
+            city_no,
+            land_property_no,
+            land_property,
+            land_area,
+            land_address,
+            created_at,
+            created_user
+    </sql>
+    
+
+
+<!-- 插入 -->
+    <insert id="insert" parameterType="TbLand" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_land
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="landNo != null and landNo != ''">
+                            land_no,
+                        </if>
+                        <if test="cityNo != null and cityNo != ''">
+                            city_no,
+                        </if>
+                        <if test="landPropertyNo != null and landPropertyNo != ''">
+                            land_property_no,
+                        </if>
+                        <if test="landProperty != null and landProperty != ''">
+                            land_property,
+                        </if>
+                        <if test="landArea != null and landArea != ''">
+                            land_area,
+                        </if>
+                        <if test="landAddress != null and landAddress != ''">
+                            land_address,
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            created_at,
+                        </if>
+                        <if test="createdUser != null and createdUser != ''">
+                            created_user,
+                        </if>
+            </trim>
+        VALUES
+             <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="landNo != null and landNo != ''">
+                            #{landNo,jdbcType=VARCHAR},
+                        </if>
+                        <if test="cityNo != null and cityNo != ''">
+                            #{cityNo,jdbcType=DECIMAL},
+                        </if>
+                        <if test="landPropertyNo != null and landPropertyNo != ''">
+                            #{landPropertyNo,jdbcType=VARCHAR},
+                        </if>
+                        <if test="landProperty != null and landProperty != ''">
+                            #{landProperty,jdbcType=VARCHAR},
+                        </if>
+                        <if test="landArea != null and landArea != ''">
+                            #{landArea,jdbcType=DECIMAL},
+                        </if>
+                        <if test="landAddress != null and landAddress != ''">
+                            #{landAddress,jdbcType=VARCHAR},
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            #{createdAt,jdbcType=TIMESTAMP},
+                        </if>
+                        <if test="createdUser != null and createdUser != ''">
+                            #{createdUser,jdbcType=VARCHAR},
+                        </if>
+             </trim>
+    </insert>
+
+
+	
+    <!-- 修改 -->
+    <update id="update" parameterType="TbLand">
+        <if test="_parameter != null">
+            <if test="id != null and id > 0">
+                update tb_land set
+        		        <if test="landNo != null and landNo != ''">
+                        	land_no = #{landNo,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="cityNo != null and cityNo != ''">
+                        	city_no = #{cityNo,jdbcType=DECIMAL},
+        		        </if>
+        		        <if test="landPropertyNo != null and landPropertyNo != ''">
+                        	land_property_no = #{landPropertyNo,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="landProperty != null and landProperty != ''">
+                        	land_property = #{landProperty,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="landArea != null and landArea != ''">
+                        	land_area = #{landArea,jdbcType=DECIMAL},
+        		        </if>
+        		        <if test="landAddress != null and landAddress != ''">
+                        	land_address = #{landAddress,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="createdAt != null and createdAt != ''">
+                        	created_at = #{createdAt,jdbcType=TIMESTAMP},
+        		        </if>
+        		        <if test="createdUser != null and createdUser != ''">
+                        	created_user = #{createdUser,jdbcType=VARCHAR},
+        		        </if>
+                	id = #{id}
+                where id = #{id}
+            </if>
+        </if>
+    </update>
+
+    <!-- 根据主键获取对象信息 -->
+    <select id="getTbLandById" resultMap="TbLandMap" parameterType="java.lang.Integer">
+        <if test="_parameter != null">
+            select <include refid="tbLandColumns"/> from tb_land
+            where id = #{_parameter} and yn = 1
+        </if>
+    </select>
+
+
+    <!-- 根据查询Bean获取数据集合，不带翻页 -->
+    <select id="queryTbLandList" resultMap="TbLandMap"
+            parameterType="stu.yang.domain.TbLandQuery">
+        select <include refid="tbLandColumns"/> from tb_land where <include refid="queryTbLandListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取数据集合，翻页 -->
+    <select id="queryTbLandListWithPage" resultMap="TbLandMap"
+            parameterType="stu.yang.domain.TbLandQuery">
+        select <include refid="tbLandColumns"/> from tb_land where <include refid="queryTbLandListWhere"/>
+        order by 
+        <if test="sidx != null and sidx != ''">
+              #{sidxColumn},jdbcType=VARCHAR}  
+              <if test="sord != null and sord != ''">
+                #{sord},jdbcType=VARCHAR}   
+              </if>
+        </if>
+        <if test="sidx == null or sidx == ''">
+              id desc 
+        </if> 
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <!-- 根据查询Bean查询-判断是否存在 -->
+    <select id="exist" resultType="java.lang.Integer" parameterType="stu.yang.domain.TbLandQuery">
+        select count(1) from tb_land where <include refid="queryTbLandListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取集合总数 -->
+    <select id="queryTbLandCount" resultType="java.lang.Integer"
+            parameterType="stu.yang.domain.TbLandQuery">
+        select count(1) from tb_land where <include refid="queryTbLandListWhere"/>
+    </select>
+
+    <!-- 删除信息-逻辑删除 -->
+    <update id="delete" parameterType="TbLand">
+        update tb_land
+        set yn = 0, update_user = #{updateUser,jdbcType=VARCHAR}
+        where id = #{id}
+    </update>
+    
+
+    <!-- 常用的查询Where条件 -->
+    <sql id="queryTbLandListWhere">
+    	yn = 1
+        <if test="id != null and id != ''">
+        	and id = #{id,jdbcType=DECIMAL}
+        </if>
+        <if test="landNo != null and landNo != ''">
+        	and land_no = #{landNo,jdbcType=VARCHAR}
+        </if>
+        <if test="cityNo != null and cityNo != ''">
+        	and city_no = #{cityNo,jdbcType=DECIMAL}
+        </if>
+        <if test="landPropertyNo != null and landPropertyNo != ''">
+        	and land_property_no = #{landPropertyNo,jdbcType=VARCHAR}
+        </if>
+        <if test="landProperty != null and landProperty != ''">
+        	and land_property = #{landProperty,jdbcType=VARCHAR}
+        </if>
+        <if test="landArea != null and landArea != ''">
+        	and land_area = #{landArea,jdbcType=DECIMAL}
+        </if>
+        <if test="landAddress != null and landAddress != ''">
+        	and land_address = #{landAddress,jdbcType=VARCHAR}
+        </if>
+        <if test="createdAt != null and createdAt != ''">
+        	and created_at = #{createdAt,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createdUser != null and createdUser != ''">
+        	and created_user = #{createdUser,jdbcType=VARCHAR}
+        </if>
+    </sql>
+</mapper>

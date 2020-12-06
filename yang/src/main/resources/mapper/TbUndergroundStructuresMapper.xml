@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="stu.yang.dao.TbUndergroundStructuresMapper">
+    <resultMap id="TbUndergroundStructuresMap" type="TbUndergroundStructures">
+		<result column="id" property="id" jdbcType="DECIMAL" />
+		<result column="land_no" property="landNo" jdbcType="VARCHAR" />
+		<result column="underground_structures_desc" property="undergroundStructuresDesc" jdbcType="VARCHAR" />
+		<result column="underground_structures_type" property="undergroundStructuresType" jdbcType="DECIMAL" />
+		<result column="data_desc" property="dataDesc" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="created_user" property="createdUser" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <sql id="tbUndergroundStructuresColumns">
+            id,
+            land_no,
+            underground_structures_desc,
+            underground_structures_type,
+            data_desc,
+            created_at,
+            created_user
+    </sql>
+    
+
+
+<!-- 插入 -->
+    <insert id="insert" parameterType="TbUndergroundStructures" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_underground_structures
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="landNo != null and landNo != ''">
+                            land_no,
+                        </if>
+                        <if test="undergroundStructuresDesc != null and undergroundStructuresDesc != ''">
+                            underground_structures_desc,
+                        </if>
+                        <if test="undergroundStructuresType != null and undergroundStructuresType != ''">
+                            underground_structures_type,
+                        </if>
+                        <if test="dataDesc != null and dataDesc != ''">
+                            data_desc,
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            created_at,
+                        </if>
+                        <if test="createdUser != null and createdUser != ''">
+                            created_user,
+                        </if>
+            </trim>
+        VALUES
+             <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="landNo != null and landNo != ''">
+                            #{landNo,jdbcType=VARCHAR},
+                        </if>
+                        <if test="undergroundStructuresDesc != null and undergroundStructuresDesc != ''">
+                            #{undergroundStructuresDesc,jdbcType=VARCHAR},
+                        </if>
+                        <if test="undergroundStructuresType != null and undergroundStructuresType != ''">
+                            #{undergroundStructuresType,jdbcType=DECIMAL},
+                        </if>
+                        <if test="dataDesc != null and dataDesc != ''">
+                            #{dataDesc,jdbcType=VARCHAR},
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            #{createdAt,jdbcType=TIMESTAMP},
+                        </if>
+                        <if test="createdUser != null and createdUser != ''">
+                            #{createdUser,jdbcType=VARCHAR},
+                        </if>
+             </trim>
+    </insert>
+
+
+	
+    <!-- 修改 -->
+    <update id="update" parameterType="TbUndergroundStructures">
+        <if test="_parameter != null">
+            <if test="id != null and id > 0">
+                update tb_underground_structures set
+        		        <if test="landNo != null and landNo != ''">
+                        	land_no = #{landNo,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="undergroundStructuresDesc != null and undergroundStructuresDesc != ''">
+                        	underground_structures_desc = #{undergroundStructuresDesc,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="undergroundStructuresType != null and undergroundStructuresType != ''">
+                        	underground_structures_type = #{undergroundStructuresType,jdbcType=DECIMAL},
+        		        </if>
+        		        <if test="dataDesc != null and dataDesc != ''">
+                        	data_desc = #{dataDesc,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="createdAt != null and createdAt != ''">
+                        	created_at = #{createdAt,jdbcType=TIMESTAMP},
+        		        </if>
+        		        <if test="createdUser != null and createdUser != ''">
+                        	created_user = #{createdUser,jdbcType=VARCHAR},
+        		        </if>
+                	id = #{id}
+                where id = #{id}
+            </if>
+        </if>
+    </update>
+
+    <!-- 根据主键获取对象信息 -->
+    <select id="getTbUndergroundStructuresById" resultMap="TbUndergroundStructuresMap" parameterType="java.lang.Integer">
+        <if test="_parameter != null">
+            select <include refid="tbUndergroundStructuresColumns"/> from tb_underground_structures
+            where id = #{_parameter} and yn = 1
+        </if>
+    </select>
+
+
+    <!-- 根据查询Bean获取数据集合，不带翻页 -->
+    <select id="queryTbUndergroundStructuresList" resultMap="TbUndergroundStructuresMap"
+            parameterType="stu.yang.domain.TbUndergroundStructuresQuery">
+        select <include refid="tbUndergroundStructuresColumns"/> from tb_underground_structures where <include refid="queryTbUndergroundStructuresListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取数据集合，翻页 -->
+    <select id="queryTbUndergroundStructuresListWithPage" resultMap="TbUndergroundStructuresMap"
+            parameterType="stu.yang.domain.TbUndergroundStructuresQuery">
+        select <include refid="tbUndergroundStructuresColumns"/> from tb_underground_structures where <include refid="queryTbUndergroundStructuresListWhere"/>
+        order by 
+        <if test="sidx != null and sidx != ''">
+              #{sidxColumn},jdbcType=VARCHAR}  
+              <if test="sord != null and sord != ''">
+                #{sord},jdbcType=VARCHAR}   
+              </if>
+        </if>
+        <if test="sidx == null or sidx == ''">
+              id desc 
+        </if> 
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <!-- 根据查询Bean查询-判断是否存在 -->
+    <select id="exist" resultType="java.lang.Integer" parameterType="stu.yang.domain.TbUndergroundStructuresQuery">
+        select count(1) from tb_underground_structures where <include refid="queryTbUndergroundStructuresListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取集合总数 -->
+    <select id="queryTbUndergroundStructuresCount" resultType="java.lang.Integer"
+            parameterType="stu.yang.domain.TbUndergroundStructuresQuery">
+        select count(1) from tb_underground_structures where <include refid="queryTbUndergroundStructuresListWhere"/>
+    </select>
+
+    <!-- 删除信息-逻辑删除 -->
+    <update id="delete" parameterType="TbUndergroundStructures">
+        update tb_underground_structures
+        set yn = 0, update_user = #{updateUser,jdbcType=VARCHAR}
+        where id = #{id}
+    </update>
+    
+
+    <!-- 常用的查询Where条件 -->
+    <sql id="queryTbUndergroundStructuresListWhere">
+    	yn = 1
+        <if test="id != null and id != ''">
+        	and id = #{id,jdbcType=DECIMAL}
+        </if>
+        <if test="landNo != null and landNo != ''">
+        	and land_no = #{landNo,jdbcType=VARCHAR}
+        </if>
+        <if test="undergroundStructuresDesc != null and undergroundStructuresDesc != ''">
+        	and underground_structures_desc = #{undergroundStructuresDesc,jdbcType=VARCHAR}
+        </if>
+        <if test="undergroundStructuresType != null and undergroundStructuresType != ''">
+        	and underground_structures_type = #{undergroundStructuresType,jdbcType=DECIMAL}
+        </if>
+        <if test="dataDesc != null and dataDesc != ''">
+        	and data_desc = #{dataDesc,jdbcType=VARCHAR}
+        </if>
+        <if test="createdAt != null and createdAt != ''">
+        	and created_at = #{createdAt,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createdUser != null and createdUser != ''">
+        	and created_user = #{createdUser,jdbcType=VARCHAR}
+        </if>
+    </sql>
+</mapper>
