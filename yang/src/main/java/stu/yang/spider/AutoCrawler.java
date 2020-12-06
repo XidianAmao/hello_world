@@ -5,9 +5,9 @@ import cn.edu.hfut.dmic.webcollector.model.Page;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
 
 
-public class AutoNewsCrawler extends BreadthCrawler {
+public class AutoCrawler extends BreadthCrawler {
 
-    public AutoNewsCrawler(String crawlPath, boolean autoParse) {
+    public AutoCrawler(String crawlPath, boolean autoParse) {
         super(crawlPath, autoParse);
 
         //种子页面，起始页面
@@ -70,10 +70,4 @@ public class AutoNewsCrawler extends BreadthCrawler {
             //next.add("http://xxxxxx.com");
         }
     }
-
-    public static void main(String[] args) throws Exception {
-
-
-    }
-
 }

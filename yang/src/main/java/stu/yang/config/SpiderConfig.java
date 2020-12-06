@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.config.TriggerTask;
 import org.springframework.scheduling.support.CronTrigger;
-import stu.yang.spider.AutoNewsCrawler;
+import stu.yang.spider.AutoCrawler;
 
 @Configuration
 @EnableScheduling
@@ -19,7 +19,7 @@ public class SpiderConfig implements SchedulingConfigurer {
         // 定时任务执行爬虫
         TriggerTask triggrtTask = new TriggerTask(
                 () -> {
-                    AutoNewsCrawler crawler = new AutoNewsCrawler("crawl", true);
+                    AutoCrawler crawler = new AutoCrawler("crawl", true);
 
                     //启动爬虫
                     try {

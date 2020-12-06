@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="stu.yang.dao.TbCrawMapper">
+    <resultMap id="TbCrawMap" type="TbCraw">
+		<result column="id" property="id" jdbcType="DECIMAL" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <sql id="tbCrawColumns">
+            id,
+            url,
+            title,
+            content,
+            created_at
+    </sql>
+    
+
+
+<!-- 插入 -->
+    <insert id="insert" parameterType="TbCraw" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tb_craw
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="url != null and url != ''">
+                            url,
+                        </if>
+                        <if test="title != null and title != ''">
+                            title,
+                        </if>
+                        <if test="content != null and content != ''">
+                            content,
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            created_at,
+                        </if>
+            </trim>
+        VALUES
+             <trim prefix="(" suffix=")" suffixOverrides=",">
+                        <if test="url != null and url != ''">
+                            #{url,jdbcType=VARCHAR},
+                        </if>
+                        <if test="title != null and title != ''">
+                            #{title,jdbcType=VARCHAR},
+                        </if>
+                        <if test="content != null and content != ''">
+                            #{content,jdbcType=VARCHAR},
+                        </if>
+                        <if test="createdAt != null and createdAt != ''">
+                            #{createdAt,jdbcType=TIMESTAMP},
+                        </if>
+             </trim>
+    </insert>
+
+
+	
+    <!-- 修改 -->
+    <update id="update" parameterType="TbCraw">
+        <if test="_parameter != null">
+            <if test="id != null and id > 0">
+                update tb_craw set
+        		        <if test="url != null and url != ''">
+                        	url = #{url,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="title != null and title != ''">
+                        	title = #{title,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="content != null and content != ''">
+                        	content = #{content,jdbcType=VARCHAR},
+        		        </if>
+        		        <if test="createdAt != null and createdAt != ''">
+                        	created_at = #{createdAt,jdbcType=TIMESTAMP},
+        		        </if>
+                	id = #{id}
+                where id = #{id}
+            </if>
+        </if>
+    </update>
+
+    <!-- 根据主键获取对象信息 -->
+    <select id="getTbCrawById" resultMap="TbCrawMap" parameterType="java.lang.Integer">
+        <if test="_parameter != null">
+            select <include refid="tbCrawColumns"/> from tb_craw
+            where id = #{_parameter} and yn = 1
+        </if>
+    </select>
+
+
+    <!-- 根据查询Bean获取数据集合，不带翻页 -->
+    <select id="queryTbCrawList" resultMap="TbCrawMap"
+            parameterType="stu.yang.domain.TbCrawQuery">
+        select <include refid="tbCrawColumns"/> from tb_craw where <include refid="queryTbCrawListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取数据集合，翻页 -->
+    <select id="queryTbCrawListWithPage" resultMap="TbCrawMap"
+            parameterType="stu.yang.domain.TbCrawQuery">
+        select <include refid="tbCrawColumns"/> from tb_craw where <include refid="queryTbCrawListWhere"/>
+        order by 
+        <if test="sidx != null and sidx != ''">
+              #{sidxColumn},jdbcType=VARCHAR}  
+              <if test="sord != null and sord != ''">
+                #{sord},jdbcType=VARCHAR}   
+              </if>
+        </if>
+        <if test="sidx == null or sidx == ''">
+              id desc 
+        </if> 
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <!-- 根据查询Bean查询-判断是否存在 -->
+    <select id="exist" resultType="java.lang.Integer" parameterType="stu.yang.domain.TbCrawQuery">
+        select count(1) from tb_craw where <include refid="queryTbCrawListWhere"/>
+    </select>
+
+    <!-- 根据查询Bean获取集合总数 -->
+    <select id="queryTbCrawCount" resultType="java.lang.Integer"
+            parameterType="stu.yang.domain.TbCrawQuery">
+        select count(1) from tb_craw where <include refid="queryTbCrawListWhere"/>
+    </select>
+
+    <!-- 删除信息-逻辑删除 -->
+    <update id="delete" parameterType="TbCraw">
+        update tb_craw
+        set yn = 0, update_user = #{updateUser,jdbcType=VARCHAR}
+        where id = #{id}
+    </update>
+    
+
+    <!-- 常用的查询Where条件 -->
+    <sql id="queryTbCrawListWhere">
+    	yn = 1
+        <if test="id != null and id != ''">
+        	and id = #{id,jdbcType=DECIMAL}
+        </if>
+        <if test="url != null and url != ''">
+        	and url = #{url,jdbcType=VARCHAR}
+        </if>
+        <if test="title != null and title != ''">
+        	and title = #{title,jdbcType=VARCHAR}
+        </if>
+        <if test="content != null and content != ''">
+        	and content = #{content,jdbcType=VARCHAR}
+        </if>
+        <if test="createdAt != null and createdAt != ''">
+        	and created_at = #{createdAt,jdbcType=TIMESTAMP}
+        </if>
+    </sql>
+</mapper>
